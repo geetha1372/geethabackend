@@ -22,6 +22,7 @@ class TrainingSession(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='training_sessions')
     game_name = models.CharField(max_length=100)
     sport_name = models.CharField(max_length=100, default='Other')
+    skill_name = models.CharField(max_length=100, blank=True, null=True)
     score = models.IntegerField()
     accuracy_percentage = models.FloatField(default=0.0)
     average_reaction_time_ms = models.FloatField(default=0.0)

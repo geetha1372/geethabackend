@@ -18,7 +18,7 @@ class TrainingSessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrainingSession
         fields = [
-            'id', 'user', 'game_name', 'sport_name', 'score',
+            'id', 'user', 'game_name', 'sport_name', 'skill_name', 'score',
             'accuracy_percentage', 'average_reaction_time_ms',
             'total_attempts', 'correct_hits', 'created_at'
         ]

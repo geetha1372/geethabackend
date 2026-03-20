@@ -79,3 +79,48 @@ class SessionHistoryView(APIView):
             })
         
         return Response(history)
+from django.db.models import Avg, Max, Count, Sum
+from django.db.models.functions import TruncDate
+
+class StatsSummaryView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        user_id = request.query_params.get('user_id')
+        if not user_id:
+            # Try to get from authenticated user
+            if request.user.is_authenticated:
+                user = request.user
+            else:
+                return Response({"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            user = get_object_or_404(User, id=user_id)
+
+        sessions = TrainingSession.objects.filter(user=user)
+        
+        # General Stats
+        stats = sessions.aggregate(
+            avgReactionTime=Avg('average_reaction_time_ms'),
+            bestScore=Max('score'),
+            totalDrills=Count('id')
+        )
+        # Ensure default values if no sessions
+        for key in stats:
+            if stats[key] is None:
+                stats[key] = 0
+
+        # Timeseries Data
+        timeseries_query = sessions.annotate(date=TruncDate('created_at')) \
+            .values('date') \
+            .annotate(totalScore=Sum('score'), totalTime=Count('id')) \
+            .order_by('date')
+        
+        timeseries = {item['date'].strftime('%Y-%m-%d'): {
+            "totalScore": item['totalScore'],
+            "totalTime": item['totalTime']
+        } for item in timeseries_query}
+
+        return Response({
+            "stats": stats,
+            "timeseries": timeseries
+        })

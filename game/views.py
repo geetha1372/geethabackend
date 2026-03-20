@@ -43,22 +43,26 @@ class LoginView(generics.GenericAPIView):
     def post(self, request):
         email = request.data.get("email")
         password = request.data.get("password")
-        user = authenticate(username=email, password=password)
-
-        if user is not None:
-            refresh = RefreshToken.for_user(user)
-            return Response({
-                "message": "Login successful",
-                "user_id": user.id,
-                "refresh": str(refresh),
-                "access": str(refresh.access_token),
-                "user": {
-                    "email": user.email,
-                    "full_name": f"{user.first_name} {user.last_name}"
-                }
-            }, status=status.HTTP_200_OK)
-        else:
-            return Response({"error": "Invalid email or password"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        # Find user by email first
+        user_obj = User.objects.filter(email=email).first()
+        if user_obj:
+            user = authenticate(username=user_obj.username, password=password)
+            if user is not None:
+                refresh = RefreshToken.for_user(user)
+                return Response({
+                    "message": "Login successful",
+                    "user_id": user.id,
+                    "refresh": str(refresh),
+                    "access": str(refresh.access_token),
+                    "user": {
+                        "email": user.email,
+                        "username": user.username,
+                        "id": user.id
+                    }
+                }, status=status.HTTP_200_OK)
+        
+        return Response({"error": "Invalid email or password"}, status=status.HTTP_401_UNAUTHORIZED)
 
 # --- FORGOT PASSWORD FLOW ---
 
@@ -156,7 +160,7 @@ class ProfileView(APIView):
             "skill_level": profile.skill_level,
             "dominant_hand": profile.dominant_hand,
             "dominant_eye": profile.dominant_eye,
-            "sport_type": profile.sport_type,
+            "sport_type": "Other",
         }
         response_data.update(difficulty_data)
         

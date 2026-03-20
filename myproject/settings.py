@@ -10,7 +10,8 @@ SECRET_KEY = 'django-insecure-=8@tc+6pit6%@$c4(a-=7oi%y*t$ke=^&ev9nidvy(r_w8_0b@
 DEBUG = True
 
 # Allowing all hosts for mobile app development/emulator testing
-ALLOWED_HOSTS = ["*","10.33.99.150","10.210.250.69","10.179.18.114"]
+ALLOWED_HOSTS = ["*","10.33.99.150","10.33.99.114","10.222.173.114"]
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 INSTALLED_APPS = [
@@ -27,9 +28,11 @@ INSTALLED_APPS = [
     'game', 
     'score',
     'level',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -103,4 +106,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'geethareddy346@gmail.com'  # <--- REPLACE THIS
-EMAIL_HOST_PASSWORD = 'iygsyepqzgxhvpau'
+EMAIL_HOST_PASSWORD = 'fktr myal omum hiuz'
