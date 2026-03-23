@@ -101,6 +101,7 @@ class StatsSummaryView(APIView):
         # General Stats
         stats = sessions.aggregate(
             avgReactionTime=Avg('average_reaction_time_ms'),
+            avgAccuracy=Avg('accuracy_percentage'),
             bestScore=Max('score'),
             totalDrills=Count('id')
         )

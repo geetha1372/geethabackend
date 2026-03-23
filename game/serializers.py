@@ -11,7 +11,7 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = [
             'full_name', 'email', 'age', 'gender', 
-            'skill_level', 'dominant_hand', 'dominant_eye'
+            'skill_level', 'dominant_hand', 'dominant_eye', 'profile_picture'
         ]
 
     def update(self, instance, validated_data):

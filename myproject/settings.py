@@ -10,7 +10,7 @@ SECRET_KEY = 'django-insecure-=8@tc+6pit6%@$c4(a-=7oi%y*t$ke=^&ev9nidvy(r_w8_0b@
 DEBUG = True
 
 # Allowing all hosts for mobile app development/emulator testing
-ALLOWED_HOSTS = ["*","10.33.99.150","10.33.99.114","10.222.173.114"]
+ALLOWED_HOSTS = ["*","10.121.247.114","10.244.235.114","10.222.173.114"]
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
@@ -97,6 +97,10 @@ USE_TZ = True
 
 # Static files
 STATIC_URL = 'static/'
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

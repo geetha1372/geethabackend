@@ -9,6 +9,7 @@ class UserProfile(models.Model):
     skill_level = models.CharField(max_length=50, null=True, blank=True)
     dominant_hand = models.CharField(max_length=20, null=True, blank=True)
     dominant_eye = models.CharField(max_length=20, null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

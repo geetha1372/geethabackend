@@ -58,7 +58,8 @@ class LoginView(generics.GenericAPIView):
                     "user": {
                         "email": user.email,
                         "username": user.username,
-                        "id": user.id
+                        "id": user.id,
+                        "full_name": UserProfile.objects.get_or_create(user=user)[0].full_name or f"{user.first_name} {user.last_name}".strip()
                     }
                 }, status=status.HTTP_200_OK)
         
@@ -154,13 +155,16 @@ class ProfileView(APIView):
         response_data = {
             "email": user.email,
             "username": user.username,
-            "full_name": profile.full_name,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "full_name": profile.full_name or f"{user.first_name} {user.last_name}".strip(),
             "age": profile.age,
             "gender": profile.gender,
             "skill_level": profile.skill_level,
             "dominant_hand": profile.dominant_hand,
             "dominant_eye": profile.dominant_eye,
             "sport_type": "Other",
+            "profile_picture": request.build_absolute_uri(profile.profile_picture.url) if profile.profile_picture else None,
         }
         response_data.update(difficulty_data)
         
@@ -180,7 +184,10 @@ class UpdateProfileView(APIView):
         profile.skill_level = request.data.get('skill_level', profile.skill_level)
         profile.dominant_hand = request.data.get('dominant_hand', profile.dominant_hand)
         profile.dominant_eye = request.data.get('dominant_eye', profile.dominant_eye)
-        # sport_type removed here
+        
+        if 'profile_picture' in request.FILES:
+            profile.profile_picture = request.FILES['profile_picture']
+            
         profile.save()
         
         return Response({"message": "Profile updated successfully"})
